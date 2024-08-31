@@ -99,6 +99,8 @@
                             <option value="3">3 asistencias</option>
                             <option value="4">4 o más asistencias</option>
                             <option value="sin_asistencia">Sin asistencias</option>
+                            <option value="externos">Externos</option>
+                            <option value="estudiantes">Estudiantes</option> 
                         </select>
                         <button id="registrarAsistenciaManual" class="w-full sm:w-auto bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Registrar Asistencia</button>
                         <br>
@@ -365,7 +367,7 @@
         async function handleQRCode(qrData) {
     try {
         showLoading();
-        const response = await fetch(`https://localhost:7016/api/Personas/ObtenerPersonaPorCodigoUnico?codigoUnico=${qrData}`);
+        const response = await fetch(`http://eventofcempresariales.somee.com/api/Personas/ObtenerPersonaPorCodigoUnico?codigoUnico=${qrData}`);
         hideLoading();
         
         if (response.ok) {
@@ -403,7 +405,7 @@ function mostrarDetallesPersona(persona) {
     document.getElementById('personaCelular').textContent = persona.celular;
     document.getElementById('personaCarrera').textContent = persona.carrera;
 
-    fetch(`https://localhost:7016/api/Asistencia/ObtenerUltimaAsistenciaPorPersonaId?idPersona=${persona.id}`)
+    fetch(`http://eventofcempresariales.somee.com/api/Asistencia/ObtenerUltimaAsistenciaPorPersonaId?idPersona=${persona.id}`)
         .then(response => response.json())
         .then(data => {
             if (data && data.fecha) {
@@ -466,7 +468,7 @@ async function subirCertificado(id) {
 
         try {
             showLoading();
-            const response = await fetch('https://localhost:7016/api/Certificado/SubirCertificado', {
+            const response = await fetch('http://eventofcempresariales.somee.com/api/Certificado/SubirCertificado', {
                 method: 'POST',
                 body: formData
             });
@@ -491,7 +493,7 @@ async function guardarCambiosPersona() {
     if (!personaActual) return;
     showLoading();
     try {
-        const response = await fetch('https://localhost:7016/api/Personas/ActualizarPersona', {
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Personas/ActualizarPersona', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(personaActual)
@@ -552,7 +554,7 @@ async function cargarAsistencias() {
     if (!verificarSesion()) return;
     try {
         const usuario = JSON.parse(localStorage.getItem('user'));
-        const response = await fetch('https://localhost:7016/api/Asistencia/ObtenerListaDeAsistencias', {
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Asistencia/ObtenerListaDeAsistencias', {
             headers: {
                 'UserId': usuario.id,
                 'Username': usuario.username
@@ -608,7 +610,7 @@ async function eliminarAsistencia(id) {
     if (result.isConfirmed) {
         showLoading();
         try {
-            const response = await fetch(`https://localhost:7016/api/Asistencia/EliminarAsistencia?id=${id}`, { method: 'DELETE' });
+            const response = await fetch(`http://eventofcempresariales.somee.com/api/Asistencia/EliminarAsistencia?id=${id}`, { method: 'DELETE' });
             hideLoading();
             if (response.ok) {
                 showAlert('Eliminado', 'La asistencia ha sido eliminada correctamente', 'success');
@@ -630,12 +632,14 @@ async function filtrarAsistencias() {
 
     if (filtro === 'sin_asistencia') {
         try {
-            const response = await fetch('https://localhost:7016/api/Asistencia/ObtenerPersonasSinAsistencias');
+            const response = await fetch('http://eventofcempresariales.somee.com/api/Asistencia/ObtenerPersonasSinAsistencias');
             if (response.ok) {
                 const personasSinAsistencia = await response.json();
                 asistenciasFiltradas = personasSinAsistencia.map(persona => ({
                     nombreCompleto: persona.nombreCompleto,
-                    institucion: persona.institucion,
+                    registro: persona.registro,
+                    correo: persona.correo,
+                    carrera: persona.carrera,
                     celular: persona.celular,
                     fecha: 'Sin asistencia registrada'
                 }));
@@ -650,12 +654,21 @@ async function filtrarAsistencias() {
     } else {
         const conteo = contarAsistenciasPorPersona(todasLasAsistencias);
         asistenciasFiltradas = todasLasAsistencias.filter(asistencia => {
+            const esExterno = asistencia.registro.toLowerCase() === 'externo';
+            const esEstudiante = !esExterno && asistencia.registro.match(/^\d+$/); // Comprueba si el registro es numérico
+
             const cumpleFiltro = filtro === 'todas' || 
+                                 (filtro === 'externos' && esExterno) ||
+                                 (filtro === 'estudiantes' && esEstudiante) ||
                                  (filtro === '4' && conteo[asistencia.nombreCompleto] >= 4) ||
                                  (conteo[asistencia.nombreCompleto] === parseInt(filtro));
+
             const cumpleBusqueda = asistencia.nombreCompleto.toLowerCase().includes(searchTerm) ||
-                                   asistencia.institucion.toLowerCase().includes(searchTerm) ||
+                                   asistencia.registro.toLowerCase().includes(searchTerm) ||
+                                   asistencia.correo.toLowerCase().includes(searchTerm) ||
+                                   asistencia.carrera.toLowerCase().includes(searchTerm) ||
                                    asistencia.celular.toLowerCase().includes(searchTerm);
+            
             return cumpleFiltro && cumpleBusqueda;
         });
     }
@@ -668,7 +681,7 @@ async function filtrarAsistencias() {
             if (!verificarSesion()) return;
             try {
                 const usuario = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('https://localhost:7016/api/Personas/ObtenerListaDePersonas', {
+                const response = await fetch('http://eventofcempresariales.somee.com/api/Personas/ObtenerListaDePersonas', {
                     headers: {
                         'UserId': usuario.id,
                         'Username': usuario.username
@@ -708,7 +721,7 @@ async function filtrarAsistencias() {
         }
         function verCertificado(id) {
     showLoading();
-    fetch(`https://localhost:7016/api/Certificado/ObtenerCertificadoPorPersonaId?idPersona=${id}`)
+    fetch(`http://eventofcempresariales.somee.com/api/Certificado/ObtenerCertificadoPorPersonaId?idPersona=${id}`)
         .then(response => response.json())
         .then(data => {
             hideLoading();
@@ -762,8 +775,8 @@ function descargarCertificado(blob, nombreArchivo) {
 async function mostrarQR(id) {
     try {
         const [qrResponse, personaResponse] = await Promise.all([
-            fetch(`https://localhost:7016/api/Personas/VerQR?id=${id}`),
-            fetch(`https://localhost:7016/api/Personas/ObtenerPersonaPorId?id=${id}`)
+            fetch(`http://eventofcempresariales.somee.com/api/Personas/VerQR?id=${id}`),
+            fetch(`http://eventofcempresariales.somee.com/api/Personas/ObtenerPersonaPorId?id=${id}`)
         ]);
 
         if (qrResponse.ok && personaResponse.ok) {
@@ -786,7 +799,7 @@ async function mostrarQR(id) {
 async function enviarCertificadosATodos() {
     showLoading();
     try {
-        const response = await fetch('https://localhost:7016/api/Personas/ObtenerListaDePersonas');
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Personas/ObtenerListaDePersonas');
         if (!response.ok) {
             showAlert('Error', 'No se pudo obtener la lista de personas', 'error');
             hideLoading();
@@ -796,7 +809,7 @@ async function enviarCertificadosATodos() {
         const personas = await response.json();
         const certificados = await Promise.all(personas.map(async (persona) => {
             // Llamar a la API para obtener el contenido del certificado
-            const certResponse = await fetch(`https://localhost:7016/api/Certificado/ObtenerCertificadoPorPersonaId?idPersona=${persona.id}`);
+            const certResponse = await fetch(`http://eventofcempresariales.somee.com/api/Certificado/ObtenerCertificadoPorPersonaId?idPersona=${persona.id}`);
             if (certResponse.ok) {
                 const certData = await certResponse.json();
                 return {
@@ -810,7 +823,7 @@ async function enviarCertificadosATodos() {
         // Filtrar los certificados válidos
         const certificadosValidos = certificados.filter(cert => cert !== undefined);
 
-        const sendResponse = await fetch('https://localhost:7016/api/Certificado/EnviarCertificadoATodos', {
+        const sendResponse = await fetch('http://eventofcempresariales.somee.com/api/Certificado/EnviarCertificadoATodos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -835,7 +848,7 @@ async function enviarCertificadosATodos() {
 async function enviarQRsATodos() {
     showLoading();
     try {
-        const response = await fetch('https://localhost:7016/api/Personas/ObtenerListaDePersonas');
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Personas/ObtenerListaDePersonas');
         if (!response.ok) {
             showAlert('Error', 'No se pudo obtener la lista de personas', 'error');
             hideLoading();
@@ -845,7 +858,7 @@ async function enviarQRsATodos() {
         const personas = await response.json();
         const qrs = await Promise.all(personas.map(async (persona) => {
             // Llamar a la API para obtener el QR
-            const qrResponse = await fetch(`https://localhost:7016/api/Personas/VerQR?id=${persona.id}`);
+            const qrResponse = await fetch(`http://eventofcempresariales.somee.com/api/Personas/VerQR?id=${persona.id}`);
             if (qrResponse.ok) {
                 const qrData = await qrResponse.json();
                 return {
@@ -859,7 +872,7 @@ async function enviarQRsATodos() {
         // Filtrar los QRs válidos
         const qrsValidos = qrs.filter(qr => qr !== undefined);
 
-        const sendResponse = await fetch('https://localhost:7016/api/QR/EnviarQRATodasLasPersonas', {
+        const sendResponse = await fetch('http://eventofcempresariales.somee.com/api/QR/EnviarQRATodasLasPersonas', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -917,7 +930,7 @@ async function registrarAsistencia(personaId) {
         showLoading();
         const fechaActual = getCurrentDateTime();
         const fechaFormateada = encodeURIComponent(fechaActual);
-        const response = await fetch(`https://localhost:7016/api/Asistencia/RegistrarAsistencia?idPersona=${personaId}&Fecha=${fechaFormateada}`, {
+        const response = await fetch(`http://eventofcempresariales.somee.com/api/Asistencia/RegistrarAsistencia?idPersona=${personaId}&Fecha=${fechaFormateada}`, {
             method: 'POST',
         });
         console.log(response);
@@ -949,7 +962,7 @@ async function guardarPersona(event) {
         registro: document.getElementById('registro').value
     };
 
-    const url = personaId ? 'https://localhost:7016/api/Personas/ActualizarPersona' : 'https://localhost:7016/api/Personas/GuardarPersona';
+    const url = personaId ? 'http://eventofcempresariales.somee.com/api/Personas/ActualizarPersona' : 'http://eventofcempresariales.somee.com/api/Personas/GuardarPersona';
     const method = personaId ? 'PATCH' : 'POST';
 
     try {
@@ -985,7 +998,7 @@ async function guardarPersonaYEnviarCorreo(event) {
 
     try {
         showLoading();
-        const response = await fetch('https://localhost:7016/api/Personas/GuardarPersonaYEnviarQR', {
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Personas/GuardarPersonaYEnviarQR', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(persona)
@@ -1032,7 +1045,7 @@ document.getElementById('addPersonaBtn').addEventListener('click', () => abrirMo
 async function editarPersona(id) {
     showLoading();
     try {
-        const response = await fetch(`https://localhost:7016/api/Personas/ObtenerPersonaPorId?id=${id}`);
+        const response = await fetch(`http://eventofcempresariales.somee.com/api/Personas/ObtenerPersonaPorId?id=${id}`);
         hideLoading();
         if (response.ok) {
             const persona = await response.json();
@@ -1066,7 +1079,7 @@ async function eliminarPersona(id) {
             if (result.isConfirmed) {
                 showLoading();
                 try {
-                    const response = await fetch(`https://localhost:7016/api/Personas/EliminarPersona?id=${id}`, { method: 'DELETE' });
+                    const response = await fetch(`http://eventofcempresariales.somee.com/api/Personas/EliminarPersona?id=${id}`, { method: 'DELETE' });
                     hideLoading();
                     if (response.ok) {
                         showAlert('Eliminado', 'La persona ha sido eliminada correctamente', 'success');
@@ -1084,7 +1097,7 @@ async function eliminarPersona(id) {
         async function reenviarQR(id) {
             showLoading();
             try {
-                const response = await fetch(`https://localhost:7016/api/Personas/ReenviarQR?id=${id}`, { method: 'POST' });
+                const response = await fetch(`http://eventofcempresariales.somee.com/api/Personas/ReenviarQR?id=${id}`, { method: 'POST' });
                 hideLoading();
                 if (response.ok) {
                     showAlert('Éxito', 'QR reenviado exitosamente', 'success');
@@ -1100,7 +1113,7 @@ async function cargarUsuarios() {
             if (!verificarSesion()) return;
             try {
                 const usuario = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('https://localhost:7016/api/Usuarios/ObtenerListaDeUsuarios', {
+                const response = await fetch('http://eventofcempresariales.somee.com/api/Usuarios/ObtenerListaDeUsuarios', {
                     headers: {
                         'UserId': usuario.id,
                         'Username': usuario.username
@@ -1144,10 +1157,10 @@ async function cargarUsuarios() {
     try {
         let url, method;
         if (usuarioId) {
-            url = 'https://localhost:7016/api/Usuarios/EditarUsuario';
+            url = 'http://eventofcempresariales.somee.com/api/Usuarios/EditarUsuario';
             method = 'PATCH';
         } else {
-            url = 'https://localhost:7016/api/Usuarios/CrearUsuario';
+            url = 'http://eventofcempresariales.somee.com/api/Usuarios/CrearUsuario';
             method = 'POST';
         }
         
@@ -1173,7 +1186,7 @@ async function cargarUsuarios() {
 async function editarUsuario(id) {
     showLoading();
     try {
-        const response = await fetch(`https://localhost:7016/api/Usuarios/ObtenerUsuarioPorId?id=${id}`);
+        const response = await fetch(`http://eventofcempresariales.somee.com/api/Usuarios/ObtenerUsuarioPorId?id=${id}`);
         hideLoading();
         if (response.ok) {
             const usuario = await response.json();
@@ -1204,7 +1217,7 @@ async function eliminarUsuario(id) {
     if (result.isConfirmed) {
         showLoading();
         try {
-            const response = await fetch(`https://localhost:7016/api/Usuarios/EliminarUsuario?id=${id}`, { method: 'DELETE' });
+            const response = await fetch(`http://eventofcempresariales.somee.com/api/Usuarios/EliminarUsuario?id=${id}`, { method: 'DELETE' });
             hideLoading();
             if (response.ok) {
                 showAlert('Eliminado', 'El usuario ha sido eliminado correctamente', 'success');
@@ -1314,11 +1327,11 @@ document.getElementById('usuarioForm').addEventListener('submit', guardarUsuario
         });
 
         document.getElementById('guardarBtn').addEventListener('click', () => {
-            guardarPersona('https://localhost:7016/api/Personas/GuardarPersona');
+            guardarPersona('http://eventofcempresariales.somee.com/api/Personas/GuardarPersona');
         });
 
         document.getElementById('guardarEnviarBtn').addEventListener('click', () => {
-            guardarPersona('https://localhost:7016/api/Personas/GuardarPersonaYEnviarQR');
+            guardarPersona('http://eventofcempresariales.somee.com/api/Personas/GuardarPersonaYEnviarQR');
         });
 
         document.getElementById('logoutButton').addEventListener('click', () => {
@@ -1369,7 +1382,7 @@ function cerrarModalRegistroAsistencia() {
 
 async function cargarPersonasParaSelect() {
     try {
-        const response = await fetch('https://localhost:7016/api/Personas/ObtenerListaDePersonas');
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Personas/ObtenerListaDePersonas');
         if (response.ok) {
             const personas = await response.json();
             mostrarPersonasEnModal(personas);
@@ -1385,6 +1398,7 @@ function mostrarPersonasEnModal(personas) {
     listaResultados.innerHTML = personas.map(persona => `
         <li class="flex items-center hover:bg-gray-100 p-2">
             <input type="checkbox" id="persona-${persona.id}" 
+                   ${personasSeleccionadas.has(persona.id) ? 'checked' : ''}
                    onchange="toggleSeleccionPersona(${persona.id})">
             <label for="persona-${persona.id}" class="ml-2 cursor-pointer">${persona.nombreCompleto}</label>
         </li>
@@ -1400,7 +1414,7 @@ function abrirModalRegistroAsistencia() {
 }
 function buscarPersonas() {
     const searchTerm = document.getElementById('personaSearchInput').value.toLowerCase();
-    fetch('https://localhost:7016/api/Personas/ObtenerListaDePersonas')
+    fetch('http://eventofcempresariales.somee.com/api/Personas/ObtenerListaDePersonas')
         .then(response => response.json())
         .then(personas => {
             const resultados = personas.filter(persona => 
@@ -1447,6 +1461,8 @@ function toggleSeleccionPersona(id) {
     } else {
         personasSeleccionadas.add(id);
     }
+
+    console.log(Array.from(personasSeleccionadas)); // Depuración: Verifica qué IDs están seleccionados
 }
 async function registrarAsistenciasMultiples() {
     if (personasSeleccionadas.size === 0) {
@@ -1461,7 +1477,7 @@ async function registrarAsistenciasMultiples() {
     }));
 
     try {
-        const response = await fetch('https://localhost:7016/api/Asistencia/RegistrarMultiplesAsistencias', {
+        const response = await fetch('http://eventofcempresariales.somee.com/api/Asistencia/RegistrarMultiplesAsistencias', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1471,6 +1487,9 @@ async function registrarAsistenciasMultiples() {
 
         if (response.ok) {
             showAlert('Éxito', 'Asistencias registradas correctamente', 'success');
+            // Limpiar selecciones después de registrar
+            personasSeleccionadas.clear();
+            desmarcarCheckboxes();
             cerrarModalRegistroAsistencia();
             cargarAsistencias();
         } else {
@@ -1481,12 +1500,23 @@ async function registrarAsistenciasMultiples() {
         showAlert('Error', 'Hubo un problema al registrar las asistencias', 'error');
     }
 }
+
+
 function cerrarModalRegistroAsistencia() {
     document.getElementById('registrarAsistenciaModal').classList.add('hidden');
     document.getElementById('personaSearchInput').value = '';
     document.getElementById('personaSearchResults').innerHTML = '';
-    personasSeleccionadas.clear();
+    personasSeleccionadas.clear(); // Limpiar el conjunto de selecciones
+    desmarcarCheckboxes(); // Desmarcar todos los checkboxes
+    mostrarTodasLasPersonas(); // Actualiza la lista de personas sin selecciones
 }
+function desmarcarCheckboxes() {
+    const checkboxes = document.querySelectorAll('#personaSearchResults input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
 async function registrarAsistenciaManual() {
     if (!personaSeleccionadaId) {
         showAlert('Error', 'Por favor, seleccione una persona', 'error');
@@ -1497,7 +1527,7 @@ async function registrarAsistenciaManual() {
     const fechaFormateada = encodeURIComponent(fechaActual);
 
     try {
-        const response = await fetch(`https://localhost:7016/api/Asistencia/RegistrarAsistencia?idPersona=${personaSeleccionadaId}&Fecha=${fechaFormateada}`, {
+        const response = await fetch(`http://eventofcempresariales.somee.com/api/Asistencia/RegistrarAsistencia?idPersona=${personaSeleccionadaId}&Fecha=${fechaFormateada}`, {
             method: 'POST',
         });
         if (response.ok) {
@@ -1549,9 +1579,13 @@ function convertirAExcel() {
 function generarExcelPersonas() {
     const personasList = document.getElementById('personasList');
     
-    // Extraer los datos de los divs que representan personas
-    const data = Array.from(personasList.querySelectorAll('.persona')).map(personaDiv => {
-        // Extraer el texto del nombre completo, registro, correo, celular, y carrera
+    // Filtrar los divs de personas que están visibles
+    const visiblePersonas = Array.from(personasList.querySelectorAll('.persona')).filter(personaDiv => {
+        return personaDiv.style.display !== 'none';
+    });
+
+    // Extraer los datos de los divs visibles
+    const data = visiblePersonas.map(personaDiv => {
         const nombreCompletoYRegistro = personaDiv.querySelector('h3').textContent.split(' - ');
         const nombreCompleto = nombreCompletoYRegistro[0];
         const registro = nombreCompletoYRegistro[1];
