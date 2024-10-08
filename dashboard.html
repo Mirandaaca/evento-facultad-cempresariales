@@ -732,7 +732,7 @@ async function filtrarAsistencias() {
                 } else if (response.status === 401) {
                     alert('Sesión no válida. Por favor, inicie sesión nuevamente.');
                     localStorage.removeItem('user');
-                    window.location.href = '/index.html';
+                    window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
                 } else {
                     console.error('Error al cargar personas');
                 }
@@ -1181,7 +1181,7 @@ async function cargarUsuarios() {
                 } else if (response.status === 401) {
                     alert('Sesión no válida. Por favor, inicie sesión nuevamente.');
                     localStorage.removeItem('user');
-                    window.location.href = '/index.html';
+                    window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
                 } else {
                     console.error('Error al cargar usuarios');
                 }
@@ -1381,14 +1381,14 @@ document.getElementById('usuarioForm').addEventListener('submit', guardarUsuario
 
         document.getElementById('logoutButton').addEventListener('click', () => {
             localStorage.removeItem('user');
-            window.location.href = '/index.html';
+            window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
         });
         function verificarSesion() {
             showLoading();
             const usuario = JSON.parse(localStorage.getItem('user'));
             if (!usuario || !usuario.id || !usuario.username) {
                 hideLoading();
-                window.location.href = '/index.html';
+                window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
                 return false;
             }
             hideLoading();
