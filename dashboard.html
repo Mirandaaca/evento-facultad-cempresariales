@@ -56,6 +56,9 @@
                 </a>
             </nav>
             <div class="absolute bottom-0 w-full p-4">
+                <button onclick="window.location.href='eventos.html'" class="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200 mb-2">
+                    Volver a Eventos
+                </button>
                 <button id="logoutButton" class="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200">Cerrar Sesión</button>
             </div>
         </div>
@@ -178,33 +181,39 @@
     <!--- Modal para agregar/editar persona (actualizado) -->
     <div id="personaModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h3 id="modalTitle" class="text-lg font-semibold mb-4">Agregar Persona</h3>
-            <form id="personaForm">
-                <input type="hidden" id="personaId">
-                <div class="mb-4">
-                    <label for="nombreCompleto" class="block text-gray-700 text-sm font-bold mb-2">Nombre Completo:</label>
-                    <input type="text" id="nombreCompleto" name="nombreCompleto" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="correo" class="block text-gray-700 text-sm font-bold mb-2">Correo:</label>
-                    <input type="email" id="correo" name="correo" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="celular" class="block text-gray-700 text-sm font-bold mb-2">Celular:</label>
-                    <input type="tel" id="celular" name="celular" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="carrera" class="block text-gray-700 text-sm font-bold mb-2">Carrera:</label>
-                    <input type="text" id="carrera" name="carrera" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                </div>
-                <div class="mb-4">
-                    <label for="registro" class="block text-gray-700 text-sm font-bold mb-2">Registro:</label>
-                    <input type="text" id="registro" name="registro" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                </div>
+             <h3 id="modalTitle" class="text-lg font-semibold mb-4">Agregar Persona</h3>
+        <form id="personaForm">
+            <input type="hidden" id="personaId">
+            <div class="mb-4">
+                <label for="nombreCompleto" class="block text-gray-700 text-sm font-bold mb-2">Nombre Completo:</label>
+                <input type="text" id="nombreCompleto" name="nombreCompleto" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="correo" class="block text-gray-700 text-sm font-bold mb-2">Correo:</label>
+                <input type="email" id="correo" name="correo" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="celular" class="block text-gray-700 text-sm font-bold mb-2">Celular:</label>
+                <input type="tel" id="celular" name="celular" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="carrera" class="block text-gray-700 text-sm font-bold mb-2">Carrera:</label>
+                <input type="text" id="carrera" name="carrera" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="registro" class="block text-gray-700 text-sm font-bold mb-2">Registro:</label>
+                <input type="text" id="registro" name="registro" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="eventos" class="block text-gray-700 text-sm font-bold mb-2">Eventos:</label>
+                <select id="eventos" name="idEventos" multiple class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <!-- Las opciones se cargarán dinámicamente -->
+                </select>
+            </div>
                 <div class="flex justify-end">
                     <button type="button" id="cancelarBtn" onclick="cerrarModal()" class="bg-gray-300 text-gray-800 py-2 px-4 rounded mr-2 hover:bg-gray-400 transition duration-200">Cancelar</button>
-                    <button type="button" id="guardarBtn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 mr-2">Guardar</button>
-                    <button type="button" id="guardarEnviarBtn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Guardar y Enviar Correo</button>
+                    <button type="button" id="guardarBtn"  class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 mr-2">Guardar</button>
+                    <button type="button" id="guardarEnviarBtn"   class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Guardar y Enviar Correo</button>
                 </div>
             </form>
         </div>
@@ -228,7 +237,7 @@
                 <h4 class="font-semibold mb-2 text-xl">Detalles de la Persona</h4>
                 <div class="bg-gray-100 p-4 rounded-lg">
                     <p class="mb-2"><strong class="text-blue-600">Nombre Completo:</strong> <span id="personaNombreCompleto" class="ml-2"></span></p>
-                    <p class="mb-2"><strong class="text-blue-600">Correo:</strong> <span id="personaRegistro" class="ml-2"></span></p>
+                    <p class="mb-2"><strong class="text-blue-600">Registro:</strong> <span id="personaRegistro" class="ml-2"></span></p>
                     <p class="mb-2"><strong class="text-blue-600">Correo:</strong> <span id="personaCorreo" class="ml-2"></span></p>
                     <p class="mb-2"><strong class="text-blue-600">Celular:</strong> <span id="personaCelular" class="ml-2"></span></p>
                     <p class="mb-2"><strong class="text-blue-600">Institución:</strong> <span id="personaCarrera" class="ml-2"></span></p>
@@ -261,6 +270,7 @@
                 <p><strong>Nombre:</strong> <span id="certNombrePersona"></span></p>
                 <p><strong>Nombre del Archivo:</strong> <span id="certNombreArchivo"></span></p>
                 <p><strong>Extensión:</strong> <span id="certExtension"></span></p>
+                <p><strong>Evento:</strong> <span id="certEvento"></span></p>
             </div>
             <div id="certificadoPreview" class="mb-4 h-96 border rounded-lg overflow-hidden">
                 <!-- La vista previa del certificado se cargará aquí -->
@@ -272,6 +282,26 @@
         </div>
     </div>
     <script>
+        async function cargarEventos() {
+    try {
+        const response = await fetch('https://localhost:7016/api/Evento/ObtenerEventos'); // Ajusta el endpoint si es necesario
+        if (response.ok) {
+            const eventos = await response.json();
+            const selectEventos = document.getElementById('eventos');
+            selectEventos.innerHTML = ''; // Asegúrate de limpiar las opciones antes de cargar
+            eventos.forEach(evento => {
+                const option = document.createElement('option');
+                option.value = evento.idEvento; // Usa el ID adecuado del evento
+                option.textContent = evento.nombre; // Usa el campo adecuado para mostrar el nombre
+                selectEventos.appendChild(option);
+            });
+        } else {
+            console.error('Error al cargar eventos');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
         
         let todasLasAsistencias = [];
         let personasSeleccionadas = new Set();
@@ -387,7 +417,7 @@
         async function handleQRCode(qrData) {
     try {
         showLoading();
-        const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerPersonaPorCodigoUnico?codigoUnico=${qrData}`);
+        const response = await fetch(`https://localhost:7016/api/Personas/ObtenerPersonaPorCodigoUnico?codigoUnico=${qrData}`);
         hideLoading();
         
         if (response.ok) {
@@ -425,7 +455,7 @@ function mostrarDetallesPersona(persona) {
     document.getElementById('personaCelular').textContent = persona.celular;
     document.getElementById('personaCarrera').textContent = persona.carrera;
 
-    fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/ObtenerUltimaAsistenciaPorPersonaId?idPersona=${persona.id}`)
+    fetch(`https://localhost:7016/api/Asistencia/ObtenerUltimaAsistenciaPorPersonaId?idPersona=${persona.id}`)
         .then(response => response.json())
         .then(data => {
             if (data && data.fecha) {
@@ -488,7 +518,7 @@ async function subirCertificado(id) {
 
         try {
             showLoading();
-            const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Certificado/SubirCertificado', {
+            const response = await fetch('https://localhost:7016/api/Certificado/SubirCertificado', {
                 method: 'POST',
                 body: formData
             });
@@ -513,7 +543,7 @@ async function guardarCambiosPersona() {
     if (!personaActual) return;
     showLoading();
     try {
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ActualizarPersona', {
+        const response = await fetch('https://localhost:7016/api/Personas/ActualizarPersona', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(personaActual)
@@ -571,18 +601,16 @@ async function guardarCambiosPersona() {
     });
 }
 async function cargarAsistencias() {
-    if (!verificarSesion()) return;
+    const idEvento = obtenerIdEvento();
+    if (!idEvento) {
+        console.error('No se encontró el ID del evento en la URL');
+        return;
+    }
     try {
-        const usuario = JSON.parse(localStorage.getItem('user'));
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/ObtenerListaDeAsistencias', {
-            headers: {
-                'UserId': usuario.id,
-                'Username': usuario.username
-            }
-        });
+        const response = await fetch(`https://localhost:7016/api/Asistencia/ObtenerListaDeAsistenciasPorEvento?idEvento=${idEvento}`);
         if (response.ok) {
-            todasLasAsistencias = await response.json();
-            mostrarAsistencias(todasLasAsistencias);
+            const asistencias = await response.json();
+            mostrarAsistencias(asistencias);
         } else {
             console.error('Error al cargar asistencias');
         }
@@ -592,11 +620,22 @@ async function cargarAsistencias() {
 }
 function contarAsistenciasPorPersona(asistencias) {
     const conteo = {};
+
+    // Iterar sobre cada asistencia para contar las ocurrencias por nombre completo
     asistencias.forEach(asistencia => {
-        conteo[asistencia.nombreCompleto] = (conteo[asistencia.nombreCompleto] || 0) + 1;
+        const nombre = asistencia.nombreCompleto;
+
+        // Si el nombre no existe en el conteo, inicializar a 1; de lo contrario, incrementar
+        if (conteo[nombre]) {
+            conteo[nombre]++;
+        } else {
+            conteo[nombre] = 1;
+        }
     });
+
     return conteo;
 }
+
 function mostrarAsistencias(asistencias) {
     const listaHTML = asistencias.map(asistencia => `
         <tr class="border-b">
@@ -630,7 +669,7 @@ async function eliminarAsistencia(id) {
     if (result.isConfirmed) {
         showLoading();
         try {
-            const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/EliminarAsistencia?id=${id}`, { method: 'DELETE' });
+            const response = await fetch(`https://localhost:7016/api/Asistencia/EliminarAsistencia?id=${id}`, { method: 'DELETE' });
             hideLoading();
             if (response.ok) {
                 showAlert('Eliminado', 'La asistencia ha sido eliminada correctamente', 'success');
@@ -647,12 +686,14 @@ async function eliminarAsistencia(id) {
 async function filtrarAsistencias() {
     const searchTerm = document.getElementById('asistenciaSearch').value.toLowerCase();
     const filtro = document.getElementById('filtroAsistencias').value;
-    
+    const idEvento = obtenerIdEvento();  // Asegúrate de tener el ID del evento cargado
+
     let asistenciasFiltradas;
 
+    // Filtra por asistentes sin asistencia
     if (filtro === 'sin_asistencia') {
         try {
-            const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/ObtenerPersonasSinAsistencias');
+            const response = await fetch(`https://localhost:7016/api/Asistencia/ObtenerPersonasSinAsistenciasEnEvento?idEvento=${idEvento}`);
             if (response.ok) {
                 const personasSinAsistencia = await response.json();
                 asistenciasFiltradas = personasSinAsistencia.map(persona => ({
@@ -664,7 +705,7 @@ async function filtrarAsistencias() {
                     fecha: 'Sin asistencia registrada'
                 }));
             } else {
-                console.error('Error al obtener personas sin asistencias');
+                console.error('Error al obtener personas sin asistencias en el evento');
                 asistenciasFiltradas = [];
             }
         } catch (error) {
@@ -672,36 +713,53 @@ async function filtrarAsistencias() {
             asistenciasFiltradas = [];
         }
     } else {
+        // Filtra las asistencias ya cargadas localmente en `todasLasAsistencias`
         const conteo = contarAsistenciasPorPersona(todasLasAsistencias);
         asistenciasFiltradas = todasLasAsistencias.filter(asistencia => {
             const esExterno = asistencia.registro.toLowerCase() === 'externo';
-            const esEstudiante = !esExterno && asistencia.registro.match(/^\d+$/); // Comprueba si el registro es numérico
+            const esEstudiante = !esExterno && /^\d+$/.test(asistencia.registro);
 
+            // Condición de filtro combinada con el valor del dropdown y el término de búsqueda
             const cumpleFiltro = filtro === 'todas' || 
-                                 (filtro === 'externos' && esExterno) ||
-                                 (filtro === 'estudiantes' && esEstudiante) ||
-                                 (filtro === '4' && conteo[asistencia.nombreCompleto] >= 4) ||
-                                 (conteo[asistencia.nombreCompleto] === parseInt(filtro));
+                                (filtro === 'externos' && esExterno) ||
+                                (filtro === 'estudiantes' && esEstudiante) ||
+                                (filtro === '4' && conteo[asistencia.nombreCompleto] >= 4) ||
+                                (conteo[asistencia.nombreCompleto] === parseInt(filtro));
 
+            // Condición de búsqueda
             const cumpleBusqueda = asistencia.nombreCompleto.toLowerCase().includes(searchTerm) ||
-                                   asistencia.registro.toLowerCase().includes(searchTerm) ||
-                                   asistencia.correo.toLowerCase().includes(searchTerm) ||
-                                   asistencia.carrera.toLowerCase().includes(searchTerm) ||
-                                   asistencia.celular.toLowerCase().includes(searchTerm);
-            
+                                asistencia.registro.toLowerCase().includes(searchTerm) ||
+                                asistencia.correo.toLowerCase().includes(searchTerm) ||
+                                asistencia.carrera.toLowerCase().includes(searchTerm) ||
+                                asistencia.celular.toLowerCase().includes(searchTerm);
+
             return cumpleFiltro && cumpleBusqueda;
         });
     }
 
+    // Mostrar los resultados filtrados en el DOM
     mostrarAsistencias(asistenciasFiltradas);
 }
 
+
+
+
+function obtenerIdEvento() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
         // Funciones para manejar la lista de personas (actualizada)
         async function cargarPersonas() {
             if (!verificarSesion()) return;
             try {
+                const eventoId = obtenerIdEvento();
+                if(!eventoId){
+                    console.error('No se encontró ID del evento en la URL');
+                    return;
+                }
+
                 const usuario = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerListaDePersonas', {
+                const response = await fetch(`https://localhost:7016/api/Personas/ObtenerTodasLasPersonasDeUnEvento/${eventoId}`, {
                     headers: {
                         'UserId': usuario.id,
                         'Username': usuario.username
@@ -732,7 +790,7 @@ async function filtrarAsistencias() {
                 } else if (response.status === 401) {
                     alert('Sesión no válida. Por favor, inicie sesión nuevamente.');
                     localStorage.removeItem('user');
-                    window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
+                    window.location.href = 'index.html';
                 } else {
                     console.error('Error al cargar personas');
                 }
@@ -744,7 +802,7 @@ async function filtrarAsistencias() {
         async function EnviarCertificado(idPersona) {
     try {
         showLoading();
-        const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Certificado/EnviarCertificadoPorPersonaId?idPersona=${idPersona}`, {
+        const response = await fetch(`https://localhost:7016/api/Certificado/EnviarCertificadoPorPersonaId?idPersonaEvento=${idPersona}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -765,7 +823,7 @@ async function filtrarAsistencias() {
 }
         function verCertificado(id) {
     showLoading();
-    fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Certificado/ObtenerCertificadoPorPersonaId?idPersona=${id}`)
+    fetch(`https://localhost:7016/api/Certificado/ObtenerCertificadoPorPersonaId?idPersonaEvento=${id}`)
         .then(response => response.json())
         .then(data => {
             hideLoading();
@@ -773,7 +831,7 @@ async function filtrarAsistencias() {
                 document.getElementById('certNombrePersona').textContent = data.nombreCompleto || 'No disponible';
                 document.getElementById('certNombreArchivo').textContent = data.nombreArchivo || 'No disponible';
                 document.getElementById('certExtension').textContent = data.extension || 'No disponible';
-                
+                document.getElementById('certEvento').textContent = data.nombreEvento || 'No disponible';
                 // Crear un Blob con el contenido del PDF
                 const blob = base64toBlob(data.contenido, 'application/pdf');
                 const blobUrl = URL.createObjectURL(blob);
@@ -819,8 +877,8 @@ function descargarCertificado(blob, nombreArchivo) {
 async function mostrarQR(id) {
     try {
         const [qrResponse, personaResponse] = await Promise.all([
-            fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/VerQR?id=${id}`),
-            fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerPersonaPorId?id=${id}`)
+            fetch(`https://localhost:7016/api/Personas/VerQR?id=${id}`),
+            fetch(`https://localhost:7016/api/Personas/ObtenerPersonaPorId?id=${id}`)
         ]);
 
         if (qrResponse.ok && personaResponse.ok) {
@@ -841,45 +899,29 @@ async function mostrarQR(id) {
     } 
 }
 async function enviarCertificadosATodos() {
-    showLoading();
+    const idEvento = obtenerIdEvento();
+    if (!idEvento) {
+        showAlert('Error', 'No se encontró el ID del evento en la URL', 'error');
+        return;
+    }
+
+    // Mostrar mensaje de confirmación antes de enviar
+    const confirmar = confirm("¿Estás seguro de que deseas enviar certificados a todos los participantes (puede tardar unos minutos)?");
+    if (!confirmar) return;
+
     try {
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerListaDePersonas');
-        if (!response.ok) {
-            showAlert('Error', 'No se pudo obtener la lista de personas', 'error');
-            hideLoading();
-            return;
-        }
-
-        const personas = await response.json();
-        const certificados = await Promise.all(personas.map(async (persona) => {
-            // Llamar a la API para obtener el contenido del certificado
-            const certResponse = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Certificado/ObtenerCertificadoPorPersonaId?idPersona=${persona.id}`);
-            if (certResponse.ok) {
-                const certData = await certResponse.json();
-                return {
-                    idPersona: persona.id,
-                    correo: persona.correo,
-                    contenido: certData.contenido // Asegúrate de que el contenido sea un string en base64
-                };
-            }
-        }));
-
-        // Filtrar los certificados válidos
-        const certificadosValidos = certificados.filter(cert => cert !== undefined);
-
-        const sendResponse = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Certificado/EnviarCertificadoATodos', {
+        showLoading();
+        const response = await fetch(`https://localhost:7016/api/Certificado/EnviarCertificadoATodos?idEvento=${idEvento}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(certificadosValidos)
+            headers: { 'Content-Type': 'application/json' }
         });
-
+        
         hideLoading();
-        if (sendResponse.ok) {
+
+        if (response.ok) {
             showAlert('Éxito', 'Certificados enviados a todos los usuarios.', 'success');
         } else {
-            showAlert('Error', 'No se pudieron enviar los certificados a todos.', 'error');
+            showAlert('Error', 'No se pudieron enviar los certificados.', 'error');
         }
     } catch (error) {
         hideLoading();
@@ -888,54 +930,63 @@ async function enviarCertificadosATodos() {
     }
 }
 
+
 // Función para enviar QRs a todos
 async function enviarQRsATodos() {
-    showLoading();
+    const idEvento = obtenerIdEvento();
+    if (!idEvento) {
+        showAlert('Error', 'No se encontró el ID del evento en la URL', 'error');
+        return;
+    }
+
     try {
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerListaDePersonas');
+        showLoading();
+        const response = await fetch(`https://localhost:7016/api/Personas/ObtenerTodasLasPersonasDeUnEvento/${idEvento}`);
         if (!response.ok) {
-            showAlert('Error', 'No se pudo obtener la lista de personas', 'error');
+            showAlert('Error', 'No se pudo obtener la lista de personas del evento', 'error');
             hideLoading();
             return;
         }
 
         const personas = await response.json();
         const qrs = await Promise.all(personas.map(async (persona) => {
-            // Llamar a la API para obtener el QR
-            const qrResponse = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/VerQR?id=${persona.id}`);
+            const qrResponse = await fetch(`https://localhost:7016/api/Personas/VerQR?id=${persona.idPersona}`);
             if (qrResponse.ok) {
                 const qrData = await qrResponse.json();
                 return {
-                    idPersona: persona.id,
+                    idPersona: persona.idPersona,
                     correo: persona.correo,
-                    base64string: qrData.base64String // Asegúrate de que el base64String sea el correcto
+                    base64string: qrData.base64String
                 };
             }
         }));
 
-        // Filtrar los QRs válidos
+        // Filtrar QRs válidos y enviar la lista
         const qrsValidos = qrs.filter(qr => qr !== undefined);
+        if (qrsValidos.length > 0) {
+            const sendResponse = await fetch('https://localhost:7016/api/QR/EnviarQRATodasLasPersonas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(qrsValidos)
+            });
 
-        const sendResponse = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/QR/EnviarQRATodasLasPersonas', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(qrsValidos)
-        });
+            if (sendResponse.ok) {
+                showAlert('Éxito', 'QRs enviados a todos los usuarios.', 'success');
+            } else {
+                showAlert('Error', 'No se pudieron enviar los QRs a todos.', 'error');
+            }
+        } else {
+            showAlert('Error', 'No se generaron QRs válidos para enviar', 'error');
+        }
 
         hideLoading();
-        if (sendResponse.ok) {
-            showAlert('Éxito', 'QRs enviados a todos los usuarios.', 'success');
-        } else {
-            showAlert('Error', 'No se pudieron enviar los QRs a todos.', 'error');
-        }
     } catch (error) {
         hideLoading();
         console.error('Error al enviar QRs:', error);
         showAlert('Error', 'Hubo un problema al enviar los QRs.', 'error');
     }
 }
+
 document.getElementById('enviarCertificadoTodos').addEventListener('click', enviarCertificadosATodos);
 document.getElementById('enviarQRTodos').addEventListener('click', enviarQRsATodos);
 
@@ -974,7 +1025,7 @@ async function registrarAsistencia(personaId) {
         showLoading();
         const fechaActual = getCurrentDateTime();
         const fechaFormateada = encodeURIComponent(fechaActual);
-        const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/RegistrarAsistencia?idPersona=${personaId}&Fecha=${fechaFormateada}`, {
+        const response = await fetch(`https://localhost:7016/api/Asistencia/RegistrarAsistencia?idPersona=${personaId}&Fecha=${fechaFormateada}`, {
             method: 'POST',
         });
         console.log(response);
@@ -995,29 +1046,33 @@ async function registrarAsistencia(personaId) {
     }
 }
 async function guardarPersona(event) {
-    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-    const personaId = document.getElementById('personaId').value;
-    const persona = {
-        id: personaId,
-        nombreCompleto: document.getElementById('nombreCompleto').value,
-        correo: document.getElementById('correo').value,
-        celular: document.getElementById('celular').value,
-        carrera: document.getElementById('carrera').value,
-        registro: document.getElementById('registro').value
-    };
+    event.preventDefault();
 
-    const url = personaId ? 'https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ActualizarPersona' : 'https://eventoempresaria-001-site1.dtempurl.com/api/Personas/GuardarPersona';
-    const method = personaId ? 'PATCH' : 'POST';
+// Obtenemos los valores seleccionados y mostramos el resultado en consola
+const eventosSeleccionados = Array.from(document.getElementById('eventos').selectedOptions)
+    .map(option => parseInt(option.value))
+    .filter(id => !isNaN(id));
+
+console.log("Eventos seleccionados:", eventosSeleccionados); // Verifica los valores en consola
+
+const persona = {
+    nombreCompleto: document.getElementById('nombreCompleto').value,
+    correo: document.getElementById('correo').value,
+    celular: document.getElementById('celular').value,
+    carrera: document.getElementById('carrera').value,
+    registro: document.getElementById('registro').value,
+    idEventos: eventosSeleccionados
+};
 
     try {
         showLoading();
-        const response = await fetch(url, {
-            method: method,
+        const response = await fetch('https://localhost:7016/api/Personas/GuardarPersona', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(persona)
         });
-
         hideLoading();
+
         if (response.ok) {
             showAlert('Éxito', 'Persona guardada correctamente', 'success');
             cerrarModal();
@@ -1042,7 +1097,7 @@ async function guardarPersonaYEnviarCorreo(event) {
 
     try {
         showLoading();
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/GuardarPersonaYEnviarQR', {
+        const response = await fetch('https://localhost:7016/api/Personas/GuardarPersonaYEnviarQR', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(persona)
@@ -1085,11 +1140,14 @@ function abrirModal(isEditing = false) {
     modal.classList.remove('hidden');
 }
 
-document.getElementById('addPersonaBtn').addEventListener('click', () => abrirModal(false));
+document.getElementById('addPersonaBtn').addEventListener('click', () => {
+    abrirModal(false); // Abre el modal de agregar persona
+    cargarEventos(); // Llama a cargar los eventos para llenar el select
+});
 async function editarPersona(id) {
     showLoading();
     try {
-        const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerPersonaPorId?id=${id}`);
+        const response = await fetch(`https://localhost:7016/api/Personas/ObtenerPersonaPorId?id=${id}`);
         hideLoading();
         if (response.ok) {
             const persona = await response.json();
@@ -1123,7 +1181,7 @@ async function eliminarPersona(id) {
             if (result.isConfirmed) {
                 showLoading();
                 try {
-                    const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/EliminarPersona?id=${id}`, { method: 'DELETE' });
+                    const response = await fetch(`https://localhost:7016/api/Personas/EliminarPersona?id=${id}`, { method: 'DELETE' });
                     hideLoading();
                     if (response.ok) {
                         showAlert('Eliminado', 'La persona ha sido eliminada correctamente', 'success');
@@ -1142,7 +1200,7 @@ async function eliminarPersona(id) {
         async function reenviarQR(id) {
             showLoading();
             try {
-                const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ReenviarQR?id=${id}`, { method: 'POST' });
+                const response = await fetch(`https://localhost:7016/api/Personas/ReenviarQR?id=${id}`, { method: 'POST' });
                 hideLoading();
                 if (response.ok) {
                     showAlert('Éxito', 'QR reenviado exitosamente', 'success');
@@ -1158,7 +1216,7 @@ async function cargarUsuarios() {
             if (!verificarSesion()) return;
             try {
                 const usuario = JSON.parse(localStorage.getItem('user'));
-                const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Usuarios/ObtenerListaDeUsuarios', {
+                const response = await fetch('https://localhost:7016/api/Usuarios/ObtenerListaDeUsuarios', {
                     headers: {
                         'UserId': usuario.id,
                         'Username': usuario.username
@@ -1181,7 +1239,7 @@ async function cargarUsuarios() {
                 } else if (response.status === 401) {
                     alert('Sesión no válida. Por favor, inicie sesión nuevamente.');
                     localStorage.removeItem('user');
-                    window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
+                    window.location.href = 'index.html';
                 } else {
                     console.error('Error al cargar usuarios');
                 }
@@ -1202,10 +1260,10 @@ async function cargarUsuarios() {
     try {
         let url, method;
         if (usuarioId) {
-            url = 'https://eventoempresaria-001-site1.dtempurl.com/api/Usuarios/EditarUsuario';
+            url = 'https://localhost:7016/api/Usuarios/EditarUsuario';
             method = 'PATCH';
         } else {
-            url = 'https://eventoempresaria-001-site1.dtempurl.com/api/Usuarios/CrearUsuario';
+            url = 'https://localhost:7016/api/Usuarios/CrearUsuario';
             method = 'POST';
         }
         
@@ -1231,7 +1289,7 @@ async function cargarUsuarios() {
 async function editarUsuario(id) {
     showLoading();
     try {
-        const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Usuarios/ObtenerUsuarioPorId?id=${id}`);
+        const response = await fetch(`https://localhost:7016/api/Usuarios/ObtenerUsuarioPorId?id=${id}`);
         hideLoading();
         if (response.ok) {
             const usuario = await response.json();
@@ -1262,7 +1320,7 @@ async function eliminarUsuario(id) {
     if (result.isConfirmed) {
         showLoading();
         try {
-            const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Usuarios/EliminarUsuario?id=${id}`, { method: 'DELETE' });
+            const response = await fetch(`https://localhost:7016/api/Usuarios/EliminarUsuario?id=${id}`, { method: 'DELETE' });
             hideLoading();
             if (response.ok) {
                 showAlert('Eliminado', 'El usuario ha sido eliminado correctamente', 'success');
@@ -1372,23 +1430,23 @@ document.getElementById('usuarioForm').addEventListener('submit', guardarUsuario
         });
 
         document.getElementById('guardarBtn').addEventListener('click', () => {
-            guardarPersona('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/GuardarPersona');
+            guardarPersona('https://localhost:7016/api/Personas/GuardarPersona');
         });
 
         document.getElementById('guardarEnviarBtn').addEventListener('click', () => {
-            guardarPersona('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/GuardarPersonaYEnviarQR');
+            guardarPersona('https://localhost:7016/api/Personas/GuardarPersonaYEnviarQR');
         });
 
         document.getElementById('logoutButton').addEventListener('click', () => {
             localStorage.removeItem('user');
-            window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
+            window.location.href = 'index.html';
         });
         function verificarSesion() {
             showLoading();
             const usuario = JSON.parse(localStorage.getItem('user'));
             if (!usuario || !usuario.id || !usuario.username) {
                 hideLoading();
-                window.location.href = 'https://mirandaaca.github.io/evento-facultad-cempresariales/';
+                window.location.href = 'index.html';
                 return false;
             }
             hideLoading();
@@ -1426,13 +1484,19 @@ function cerrarModalRegistroAsistencia() {
 }
 
 async function cargarPersonasParaSelect() {
+    const idEvento = obtenerIdEvento();
+    if (!idEvento) {
+        console.error('No se encontró el ID del evento en la URL');
+        return;
+    }
+
     try {
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerListaDePersonas');
+        const response = await fetch(`https://localhost:7016/api/Personas/ObtenerTodasLasPersonasDeUnEvento/${idEvento}`);
         if (response.ok) {
             const personas = await response.json();
             mostrarPersonasEnModal(personas);
         } else {
-            console.error('Error al cargar personas');
+            console.error('Error al cargar personas para el evento');
         }
     } catch (error) {
         console.error('Error:', error);
@@ -1459,7 +1523,7 @@ function abrirModalRegistroAsistencia() {
 }
 function buscarPersonas() {
     const searchTerm = document.getElementById('personaSearchInput').value.toLowerCase();
-    fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Personas/ObtenerListaDePersonas')
+    fetch('https://localhost:7016/api/Personas/ObtenerListaDePersonas')
         .then(response => response.json())
         .then(personas => {
             const resultados = personas.filter(persona => 
@@ -1510,39 +1574,47 @@ function toggleSeleccionPersona(id) {
     console.log(Array.from(personasSeleccionadas)); // Depuración: Verifica qué IDs están seleccionados
 }
 async function registrarAsistenciasMultiples() {
+    const idEvento = obtenerIdEvento();
+    if (!idEvento) {
+        showAlert('Error', 'No se encontró el ID del evento en la URL', 'error');
+        return;
+    }
+
     if (personasSeleccionadas.size === 0) {
         showAlert('Error', 'Por favor, seleccione al menos una persona', 'error');
         return;
     }
 
-    const fechaActual = getCurrentDateTime();
-    const asistencias = Array.from(personasSeleccionadas).map(id => ({
-        idPersona: id,
+    // Obtener la fecha y hora actual en el formato adecuado
+    const fechaActual = new Date().toISOString();
+
+    // Crear el payload en el formato esperado
+    const asistencias = Array.from(personasSeleccionadas).map(idPersona => ({
+        idEvento: parseInt(idEvento),
+        idPersona: idPersona,
         fecha: fechaActual
     }));
 
     try {
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/RegistrarMultiplesAsistencias', {
+        showLoading();
+        const response = await fetch('https://localhost:7016/api/Asistencia/RegistrarMultiplesAsistencias', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(asistencias)
         });
+        hideLoading();
 
         if (response.ok) {
             showAlert('Éxito', 'Asistencias registradas correctamente', 'success');
-            // Limpiar selecciones después de registrar
-            personasSeleccionadas.clear();
-            desmarcarCheckboxes();
             cerrarModalRegistroAsistencia();
-            cargarAsistencias();
+            cargarAsistencias(); // Recargar la lista de asistencias
         } else {
-            showAlert('Error', 'No se pudieron registrar las asistencias', 'error');
+            showAlert('Error', 'No se pudo registrar las asistencias', 'error');
         }
     } catch (error) {
+        hideLoading();
         console.error('Error al registrar asistencias:', error);
-        showAlert('Error', 'Hubo un problema al registrar las asistencias', 'error');
+        showAlert('Error', 'Hubo un problema al conectar con el servidor', 'error');
     }
 }
 
@@ -1572,7 +1644,7 @@ async function registrarAsistenciaManual() {
     const fechaFormateada = encodeURIComponent(fechaActual);
 
     try {
-        const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Asistencia/RegistrarAsistencia?idPersona=${personaSeleccionadaId}&Fecha=${fechaFormateada}`, {
+        const response = await fetch(`https://localhost:7016/api/Asistencia/RegistrarAsistencia?idPersona=${personaSeleccionadaId}&Fecha=${fechaFormateada}`, {
             method: 'POST',
         });
         if (response.ok) {
@@ -1664,7 +1736,7 @@ document.getElementById('generarExcelPersonas').addEventListener('click', genera
 document.getElementById('convertirExcel').addEventListener('click', convertirAExcel);
 async function cargarBitacora() {
     try {
-        const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Bitacora/ListarBitacoras');
+        const response = await fetch('https://localhost:7016/api/Bitacora/ListarBitacoras');
         if (response.ok) {
             const bitacora = await response.json();
             mostrarBitacora(bitacora);
