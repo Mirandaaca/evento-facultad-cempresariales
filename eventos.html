@@ -245,7 +245,7 @@
         async function verDetalles(idEvento) {
             showLoading();
             try {
-                const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Evento/ObtenerEventoPorId?id=${idEvento}`);
+                const response = await fetch(`http://cristopher1234-001-site1.anytempurl.com/api/Evento/ObtenerEventoPorId?id=${idEvento}`);
                 if (!response.ok) throw new Error('Error al obtener el evento');
                 
                 const evento = await response.json();
@@ -269,7 +269,7 @@
         async function actualizarEvento(evento) {
             showLoading();
             try {
-                const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Evento/ActualizarEvento', {
+                const response = await fetch('http://cristopher1234-001-site1.anytempurl.com/api/Evento/ActualizarEvento', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -307,7 +307,7 @@
             if (result.isConfirmed) {
                 showLoading();
                 try {
-                    const response = await fetch(`https://eventoempresaria-001-site1.dtempurl.com/api/Evento/EliminarEvento?id=${eventId}`, {
+                    const response = await fetch(`http://cristopher1234-001-site1.anytempurl.com/api/Evento/EliminarEvento?id=${eventId}`, {
                         method: 'DELETE'
                     });
 
@@ -365,7 +365,7 @@
         async function loadEvents() {
             showLoading();
             try {
-                const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Evento/ObtenerEventos');
+                const response = await fetch('http://cristopher1234-001-site1.anytempurl.com/api/Evento/ObtenerEventos');
                 if (!response.ok) throw new Error('Error al cargar los eventos');
                 
                 const events = await response.json();
@@ -492,7 +492,7 @@
         async function crearEvento(evento) {
             showLoading();
             try {
-                const response = await fetch('https://eventoempresaria-001-site1.dtempurl.com/api/Evento/GuardarEvento', {
+                const response = await fetch('http://cristopher1234-001-site1.anytempurl.com/api/Evento/GuardarEvento', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
